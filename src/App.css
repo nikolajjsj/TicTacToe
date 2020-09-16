@@ -14,7 +14,7 @@
 
 .board {
   display: grid;
-  grid-template-columns: 208px 208px 208px;
+  grid-template-columns: 26vh 26vh 26vh;
   justify-content: center;
 }
 
@@ -24,13 +24,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 200px;
-  width: 200px;
+  height: 25vh;
+  width: 25vh;
   border: 2px solid var(--main-dark-color);
   border-radius: 12px;
   transition-duration: 0.2s;
   margin: 2px;
-  font-size: 100px;
+  font-size: 20vh;
   font-weight: 900;
 }
 
@@ -63,4 +63,16 @@ button:hover {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+@media (orientation: portrait) {
+  .board {
+    grid-template-columns: 26vw 26vw 26vw;
+  }
+
+  .board-tile {
+    height: 25vw;
+    width: 25vw;
+    font-size: 20vw;
+  }
 }
