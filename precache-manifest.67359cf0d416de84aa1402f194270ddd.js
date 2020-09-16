@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a44e7e1559891726f2590e5d2ba71b66",
+    "revision": "5512e27b228670fc2839f4a92303aa56",
     "url": "/TicTacToe/index.html"
   },
   {
-    "revision": "ce4c4a399a3ad35486f1",
+    "revision": "af16222c3c434961a25b",
     "url": "/TicTacToe/static/css/main.9ec16c32.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/TicTacToe/static/js/2.4ec9cda9.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "ce4c4a399a3ad35486f1",
-    "url": "/TicTacToe/static/js/main.b61c3e72.chunk.js"
+    "revision": "af16222c3c434961a25b",
+    "url": "/TicTacToe/static/js/main.4876691f.chunk.js"
   },
   {
     "revision": "35d19f0c13e4574912e8",
