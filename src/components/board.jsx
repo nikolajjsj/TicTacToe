@@ -62,14 +62,14 @@ export default function Board() {
     let result = checkWinner(board);
     if (result !== null) return scores[result];
 
-    if (isMaximizing) {
+    if (isMaximizing === true) {
       let bestScore = -Infinity;
       for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
           // Is the spot available?
           if (board[i][j] === "") {
             board[i][j] = currentPlayer();
-            bestScore = Math.max(bestScore, minimax(board, depth++, false));
+            bestScore = Math.max(bestScore, minimax(board, depth + 1, false));
             board[i][j] = "";
           }
         }
@@ -81,8 +81,8 @@ export default function Board() {
         for (let j = 0; j < 3; j++) {
           // Is the spot available?
           if (board[i][j] === "") {
-            board[i][j] = isX ? "O" : "X";
-            bestScore = Math.min(bestScore, minimax(board, depth++, true));
+            board[i][j] = currentPlayer() === "X" ? "O" : "X";
+            bestScore = Math.min(bestScore, minimax(board, depth + 1, true));
             board[i][j] = "";
           }
         }
@@ -120,16 +120,18 @@ export default function Board() {
     checkTrio(arr[2][0], arr[1][1], arr[0][2]);
 
     if (winner != null) return winner;
-    // length of array tiles that does not include  ''
-    let len = 9;
+    if (!movesLeft()) return "tie";
+    return winner;
+  }
+
+  function movesLeft() {
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         // Is the spot available?
-        if (board[i][j] === "") len--;
+        if (board[i][j] === "") return true;
       }
     }
-    if (len === 9 && winner === null) return "tie";
-    return winner;
+    return false;
   }
 
   return (
