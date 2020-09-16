@@ -30,7 +30,6 @@ export default function Board() {
     // best score with minimax algorhitm
     let bestScore = -Infinity;
     let move;
-    // loop over slots in the board
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         // is spot available
@@ -39,11 +38,9 @@ export default function Board() {
           let score = minimax(board, 0, false);
           board[i][j] = "";
           if (score > bestScore) {
-            console.log("score is bigger than bestScore");
             bestScore = score;
             move = { i, j };
           }
-          console.log(score);
         }
       }
     }
@@ -63,9 +60,7 @@ export default function Board() {
 
   function minimax(board, depth, isMaximizing) {
     let result = checkWinner(board);
-    if (result !== null) {
-      return scores[result];
-    }
+    if (result !== null) return scores[result];
 
     if (isMaximizing) {
       let bestScore = -Infinity;
@@ -74,9 +69,8 @@ export default function Board() {
           // Is the spot available?
           if (board[i][j] === "") {
             board[i][j] = currentPlayer();
-            let score = minimax(board, depth + 1, false);
+            bestScore = Math.max(bestScore, minimax(board, depth++, false));
             board[i][j] = "";
-            bestScore = Math.max(score, bestScore);
           }
         }
       }
@@ -88,9 +82,8 @@ export default function Board() {
           // Is the spot available?
           if (board[i][j] === "") {
             board[i][j] = isX ? "O" : "X";
-            let score = minimax(board, depth + 1, true);
+            bestScore = Math.min(bestScore, minimax(board, depth++, true));
             board[i][j] = "";
-            bestScore = Math.min(score, bestScore);
           }
         }
       }
@@ -125,6 +118,17 @@ export default function Board() {
     /// check for winners in diagonals
     checkTrio(arr[0][0], arr[1][1], arr[2][2]);
     checkTrio(arr[2][0], arr[1][1], arr[0][2]);
+
+    if (winner != null) return winner;
+    // length of array tiles that does not include  ''
+    let len = 9;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        // Is the spot available?
+        if (board[i][j] === "") len--;
+      }
+    }
+    if (len === 9 && winner === null) return "tie";
     return winner;
   }
 
