@@ -30,29 +30,28 @@ export default function Board() {
     // best score with minimax algorhitm
     let bestScore = -Infinity;
     let move;
-    // temp board
-    let tmpBoard = [...board];
     // loop over slots in the board
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         // is spot available
-        if (tmpBoard[i][j] === "") {
-          tmpBoard[i][j] = currentPlayer();
-          let score = minimax(tmpBoard, 0, false);
-          tmpBoard[i][j] = "";
+        if (board[i][j] === "") {
+          board[i][j] = currentPlayer();
+          let score = minimax(board, 0, false);
+          board[i][j] = "";
           if (score > bestScore) {
+            console.log("score is bigger than bestScore");
             bestScore = score;
             move = { i, j };
-					}
-					console.log(score);
+          }
+          console.log(score);
         }
       }
-		}
+    }
     if (move != null) {
       console.log("AI turn");
-      tmpBoard[move.i][move.j] = currentPlayer();
+      board[move.i][move.j] = currentPlayer();
       setTurn(!isX);
-      setBoard(tmpBoard);
+      setBoard(board);
       let result = checkWinner(board);
       if (result != null) {
         setWinner(result);
@@ -64,29 +63,31 @@ export default function Board() {
 
   function minimax(board, depth, isMaximizing) {
     let result = checkWinner(board);
-    if (result != null) return scores[result];
+    if (result !== null) {
+      return scores[result];
+    }
 
     if (isMaximizing) {
       let bestScore = -Infinity;
       for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
-          // is spot available
+          // Is the spot available?
           if (board[i][j] === "") {
             board[i][j] = currentPlayer();
             let score = minimax(board, depth + 1, false);
-						board[i][j] = "";
+            board[i][j] = "";
             bestScore = Math.max(score, bestScore);
           }
         }
       }
       return bestScore;
     } else {
-      let bestScore = -Infinity;
+      let bestScore = Infinity;
       for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
-          // is spot available
+          // Is the spot available?
           if (board[i][j] === "") {
-            board[i][j] = isX ? 'O' : 'X';
+            board[i][j] = isX ? "O" : "X";
             let score = minimax(board, depth + 1, true);
             board[i][j] = "";
             bestScore = Math.min(score, bestScore);
@@ -94,7 +95,7 @@ export default function Board() {
         }
       }
       return bestScore;
-		}
+    }
   }
 
   function resetBoard() {
