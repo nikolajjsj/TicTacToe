@@ -28,11 +28,10 @@ export default function Board() {
 
   function aiMove() {
     // best score with minimax algorhitm
-    let bestScore = -Infinity;
+    let bestScore = -100;
     let move;
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
-        // is spot available
         if (board[i][j] === "") {
           board[i][j] = currentPlayer();
           let score = minimax(board, 0, false);
@@ -44,50 +43,39 @@ export default function Board() {
         }
       }
     }
-    if (move != null) {
-      console.log("AI turn");
-      board[move.i][move.j] = currentPlayer();
-      setTurn(!isX);
-      setBoard(board);
-      let result = checkWinner(board);
-      if (result != null) {
-        setWinner(result);
-      }
-    }
+    if (move != null) nextMove(move.i, move.j);
   }
 
-  const scores = { X: 10, O: -10, tie: 0 };
+  const scores = { X: isX ? 100 : -100, O: isX ? -100 : 100, tie: 0 };
 
   function minimax(board, depth, isMaximizing) {
     let result = checkWinner(board);
     if (result !== null) return scores[result];
 
-    if (isMaximizing === true) {
-      let bestScore = -Infinity;
+    if (isMaximizing) {
+      let maxS = -100;
       for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
-          // Is the spot available?
           if (board[i][j] === "") {
             board[i][j] = currentPlayer();
-            bestScore = Math.max(bestScore, minimax(board, depth + 1, false));
+            maxS = Math.max(maxS, minimax(board, depth++, false)) - depth;
             board[i][j] = "";
           }
         }
       }
-      return bestScore;
+      return maxS;
     } else {
-      let bestScore = Infinity;
+      let minS = 100;
       for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
-          // Is the spot available?
           if (board[i][j] === "") {
-            board[i][j] = currentPlayer() === "X" ? "O" : "X";
-            bestScore = Math.min(bestScore, minimax(board, depth + 1, true));
+            board[i][j] = isX ? "O" : "X";
+            minS = Math.min(minS, minimax(board, depth++, true)) + depth;
             board[i][j] = "";
           }
         }
       }
-      return bestScore;
+      return minS;
     }
   }
 
@@ -137,7 +125,9 @@ export default function Board() {
   return (
     <>
       <h2 hidden={winner !== ""}>Turn: {currentPlayer()}</h2>
-      <h2 hidden={winner === ""}>Winner: {winner}</h2>
+      <h2 hidden={winner === ""}>
+        {winner === "tie" ? "" : "Winner: "} {winner.toUpperCase()}
+      </h2>
       <div className="button-row">
         <button onClick={() => aiMove()}>AI Turn</button>
         <button onClick={() => resetBoard()}>Reset</button>
